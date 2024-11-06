@@ -1,101 +1,105 @@
-import Image from "next/image";
+'use client'
+
+import { HeaderComponent } from "@/components/header";
+import { ResponsiveChatInput } from "@/components/responsive-chat-input";
+import { FooterComponent } from "@/components/footer"; // Added FooterComponent import
+import { useActiveAccount } from "thirdweb/react"; // Import useActiveAccount hook
+import { ID } from "appwrite";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Progress } from "@/components/ui/progress";
+import { useTheme } from "@/components/theme-provider"; // Import useTheme hook
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const account = useActiveAccount(); // Use the useActiveAccount hook to get the account
+  const [isLoading, setIsLoading] = useState(false);
+  const [progressValue, setProgressValue] = useState(0);
+  const router = useRouter();
+  const { theme } = useTheme(); // Get the current theme from the useTheme hook
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSubmitAndTest = async (gen_con_type: string, prompt: string) => {
+    const docID = ID.unique(); // Generate a new unique ID for each submission
+    console.log("handleSubmitAndTest called with:", { gen_con_type, prompt });
+    setIsLoading(true);
+    setProgressValue(0); // Reset progress value when submission starts
+    try {
+      console.log("Creating document content with docID:", docID);
+      const createDocResponse = await fetch("/api/createDocContent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          documentId: docID,
+          data: {
+            gen_con_type,
+            wallet_addr: account?.address,
+            content_gen_date_time: new Date().toISOString(),
+            prompt,
+          },
+          permissions: ["read(\"any\")"],
+        }),
+      });
+
+      console.log("createDocResponse status:", createDocResponse.status);
+      if (createDocResponse.ok) {
+        console.log("Document created successfully");
+      } else {
+        console.error("Failed to create document");
+      }
+
+      console.log("Sending test API call with docID:", docID);
+      const testApiResponse = await fetch("/api/writeMyNewsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wallet_address: account?.address,
+          prompt,
+          docID: docID,
+        }),
+      });
+
+      console.log("testApiResponse status:", testApiResponse.status);
+      if (testApiResponse.ok) {
+        const result = await testApiResponse.json();
+        console.log("Test response:", result);
+      } else {
+        console.error("Failed to send test request");
+      }
+    } catch (error) {
+      console.error("Error in handleSubmitAndTest:", error);
+    } finally {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 1;
+        setProgressValue(progress);
+        if (progress >= 100) {
+          clearInterval(interval);
+          setIsLoading(false);
+          router.push("/library");
+        }
+      }, 300); // Adjust the interval to achieve 30-60 seconds
+    }
+  };
+
+  console.log("Rendering Home component with account:", account);
+
+  return (
+    <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white'} min-h-screen`}>
+      <HeaderComponent />
+      {account ? (
+        <>
+          <ResponsiveChatInput onSubmit={handleSubmitAndTest} />
+          {isLoading && <Progress value={progressValue} />} {/* Render Progress component only when loading */}
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <h2 className="text-2xl font-bold">Please log in to continue</h2>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+      <FooterComponent /> {/* Added FooterComponent */}
     </div>
   );
 }
