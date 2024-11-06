@@ -5,14 +5,18 @@ import { Button } from "@/components/ui/button"
 import { Pen, Menu, X, Moon, Sun } from "lucide-react"
 import Link from "next/link"
 import { ConnectButton } from "thirdweb/react";
+import { createThirdwebClient } from "thirdweb";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
-import { client } from '../app/client';
 import { useActiveAccount } from "thirdweb/react";
 import { useWalletBalance } from "thirdweb/react";
 import { mumbai } from "thirdweb/chains";
 import { useTheme } from "@/components/theme-provider"
 import { LoginPayload, VerifyLoginPayloadParams } from "thirdweb/auth";
 
+// Create the client with your clientId
+const client = createThirdwebClient({
+  clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID as string, // Replace with your actual clientId
+});
 
 const wallets = [
   inAppWallet({
@@ -28,7 +32,7 @@ export function HeaderComponent() {
   const account = useActiveAccount();
   const { data: balance } = useWalletBalance({
     client,
-    chain: mumbai, // Cast chain to any to avoid type error
+    chain: mumbai,
     address: account?.address,
   });
   const { theme, setTheme } = useTheme()
@@ -69,7 +73,6 @@ export function HeaderComponent() {
                     } else {
                       const data = await response.json();
                       console.log("Login successful:", data);
-                      // Display wallet balance
                       if (account) {
                         console.log("Wallet balance:", balance?.displayValue, balance?.symbol);
                       }
