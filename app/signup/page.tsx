@@ -32,8 +32,8 @@ export default function SignUpPage() {
           if (checkWalletResult.exists) {
             router.push("/");
           }
-        } catch (error) {
-          console.error("Error checking wallet existence:", error);
+        } finally {
+          // Handle any cleanup or final steps here if needed
         }
       }
     };
@@ -55,8 +55,8 @@ export default function SignUpPage() {
         } else {
           console.error("Failed to fetch wallet data");
         }
-      } catch (error) {
-        console.error("Error fetching wallet data:", error);
+      } finally {
+        // Handle any cleanup or final steps here if needed
       }
     };
 
@@ -91,8 +91,8 @@ export default function SignUpPage() {
       } else {
         alert("Signup failed. Please try again.");
       }
-    } catch (error) {
-      alert("An error occurred. Please try again.");
+    } finally {
+      // Handle any cleanup or final steps here if needed
     }
   };
 

@@ -18,10 +18,9 @@ export default function Library() {
       ) : (
         <div className="flex flex-col items-center justify-center h-[calc(100vh-64px-96px)]">
           <h2 className="text-2xl font-bold">Please log in to view your library</h2>
-          <p className="text-lg mt-4">If you don't have any newsletters, please go to the Create tab to get started.</p>
+          <p className="text-lg mt-4">If you don&apos;t have any newsletters, please go to the Create tab to get started.</p>
         </div>
       )}
-      {/* If the newsletter comes back blank, display the same message */}
       <FooterComponent />
     </div>
   );
