@@ -1,5 +1,8 @@
 "use client"
 
+
+
+
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Pen, Menu, X, Moon, Sun } from "lucide-react"
@@ -12,6 +15,9 @@ import { useWalletBalance } from "thirdweb/react";
 import { mumbai } from "thirdweb/chains";
 import { useTheme } from "@/components/theme-provider"
 import { LoginPayload, VerifyLoginPayloadParams } from "thirdweb/auth";
+
+
+export const dynamic = "force-dynamic";
 
 // Create the client with your clientId
 const client = createThirdwebClient({
