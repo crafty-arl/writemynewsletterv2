@@ -2,28 +2,47 @@
 
 import { HeaderComponent } from "@/components/header";
 import { ResponsiveChatInput } from "@/components/responsive-chat-input";
-import { FooterComponent } from "@/components/footer"; // Added FooterComponent import
-import { useActiveAccount } from "thirdweb/react"; // Import useActiveAccount hook
+import { FooterComponent } from "@/components/footer";
+import { useActiveAccount } from "thirdweb/react";
 import { ID } from "appwrite";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Progress } from "@/components/ui/progress";
-import { useTheme } from "@/components/theme-provider"; // Import useTheme hook
+import { useTheme } from "@/components/theme-provider";
 
 export default function Home() {
-  const account = useActiveAccount(); // Use the useActiveAccount hook to get the account
+  const account = useActiveAccount();
   const [isLoading, setIsLoading] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
   const router = useRouter();
-  const { theme } = useTheme(); // Get the current theme from the useTheme hook
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    const fetchWalletData = async () => {
+      try {
+        const response = await fetch("/api/checkWalletExist");
+        if (response.ok) {
+          const data = await response.json();
+
+          if (!data.documents[0]?.username || !data.documents[0]?.email) {
+            router.push("/signup");
+          }
+        } else {
+          console.error("Failed to fetch wallet data");
+        }
+      } catch (error) {
+        console.error("Error fetching wallet data:", error);
+      }
+    };
+
+    fetchWalletData();
+  }, [router]);
 
   const handleSubmitAndTest = async (gen_con_type: string, prompt: string) => {
-    const docID = ID.unique(); // Generate a new unique ID for each submission
-    console.log("handleSubmitAndTest called with:", { gen_con_type, prompt });
+    const docID = ID.unique();
     setIsLoading(true);
-    setProgressValue(0); // Reset progress value when submission starts
+    setProgressValue(0);
     try {
-      console.log("Creating document content with docID:", docID);
       const createDocResponse = await fetch("/api/createDocContent", {
         method: "POST",
         headers: {
@@ -41,14 +60,10 @@ export default function Home() {
         }),
       });
 
-      console.log("createDocResponse status:", createDocResponse.status);
-      if (createDocResponse.ok) {
-        console.log("Document created successfully");
-      } else {
+      if (!createDocResponse.ok) {
         console.error("Failed to create document");
       }
 
-      console.log("Sending test API call with docID:", docID);
       const testApiResponse = await fetch("/api/writeMyNewsletter", {
         method: "POST",
         headers: {
@@ -61,11 +76,7 @@ export default function Home() {
         }),
       });
 
-      console.log("testApiResponse status:", testApiResponse.status);
-      if (testApiResponse.ok) {
-        const result = await testApiResponse.json();
-        console.log("Test response:", result);
-      } else {
+      if (!testApiResponse.ok) {
         console.error("Failed to send test request");
       }
     } catch (error) {
@@ -80,11 +91,9 @@ export default function Home() {
           setIsLoading(false);
           router.push("/library");
         }
-      }, 300); // Adjust the interval to achieve 30-60 seconds
+      }, 300);
     }
   };
-
-  console.log("Rendering Home component with account:", account);
 
   return (
     <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white'} min-h-screen`}>
@@ -92,14 +101,14 @@ export default function Home() {
       {account ? (
         <>
           <ResponsiveChatInput onSubmit={handleSubmitAndTest} />
-          {isLoading && <Progress value={progressValue} />} {/* Render Progress component only when loading */}
+          {isLoading && <Progress value={progressValue} />}
         </>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen">
           <h2 className="text-2xl font-bold">Please log in to continue</h2>
         </div>
       )}
-      <FooterComponent /> {/* Added FooterComponent */}
+      <FooterComponent />
     </div>
   );
 }

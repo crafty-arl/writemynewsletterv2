@@ -1,11 +1,8 @@
 "use client"
 
-
-
-
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
-import { Pen, Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X, Moon, Sun } from "lucide-react"
 import Link from "next/link"
 import { ConnectButton } from "thirdweb/react";
 import { createThirdwebClient } from "thirdweb";
@@ -15,7 +12,6 @@ import { useWalletBalance } from "thirdweb/react";
 import { mumbai } from "thirdweb/chains";
 import { useTheme } from "@/components/theme-provider"
 import { LoginPayload, VerifyLoginPayloadParams } from "thirdweb/auth";
-
 
 export const dynamic = "force-dynamic";
 
@@ -48,8 +44,7 @@ export function HeaderComponent() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <Pen className="h-5 w-5 text-orange-200" />
-            <h1 className="text-base font-semibold text-orange-100">WriteMyNewsletter</h1>
+            <h1 className="text-base font-semibold text-orange-100">No Code Creative</h1>
           </div>
           <nav className="hidden md:flex space-x-6">
             <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="/">

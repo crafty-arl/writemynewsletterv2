@@ -28,10 +28,8 @@ export default function SignUpPage() {
           });
 
           const checkWalletResult = await checkWalletResponse.json();
-          console.log("Check wallet response:", checkWalletResult);
 
           if (checkWalletResult.exists) {
-            console.log("Wallet address already exists");
             router.push("/");
           }
         } catch (error) {
@@ -43,13 +41,30 @@ export default function SignUpPage() {
     checkAccountExistence();
   }, [account, router]);
 
+  useEffect(() => {
+    const fetchWalletData = async () => {
+      try {
+        const response = await fetch("/api/checkWalletExist");
+        if (response.ok) {
+          const data = await response.json();
+
+          // If wallet data exists, redirect to home page
+          if (data.documents.length > 0) {
+            router.push("/");
+          }
+        } else {
+          console.error("Failed to fetch wallet data");
+        }
+      } catch (error) {
+        console.error("Error fetching wallet data:", error);
+      }
+    };
+
+    fetchWalletData();
+  }, [router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Submitting form with values:");
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Account address:", account?.address);
 
     try {
       const response = await fetch("/api/createDoc", {
@@ -70,29 +85,18 @@ export default function SignUpPage() {
         }),
       });
 
-      console.log("Received response from /api/createDoc");
-      console.log("Response status:", response.status);
-
       if (response.ok) {
-        // Handle successful signup
-        console.log("Signup successful");
         alert("Account created successfully!");
         router.push("/");
       } else {
-        // Handle signup error
-        console.error("Signup failed");
-        console.error("Response body:", await response.text());
         alert("Signup failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error:", error);
       alert("An error occurred. Please try again.");
     }
   };
 
   if (!account) {
-    console.log("No active account found");
-
     return (
       <>
         <HeaderComponent />
@@ -104,8 +108,6 @@ export default function SignUpPage() {
       </>
     );
   }
-
-  console.log("Active account found:", account);
 
   return (
     <>

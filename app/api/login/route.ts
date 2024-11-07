@@ -35,9 +35,7 @@ export async function GET(request: Request) {
       const exists = walletAddresses.includes(walletAddressToCheck);
       console.log('Wallet address exists:', exists);
       
-      const response = exists 
-        ? NextResponse.json({ exists: true }) 
-        : NextResponse.redirect(new URL('/signup', request.url));
+      const response = NextResponse.json({ exists });
       
       const cookieStore = await cookies();
       cookieStore.set('uuid', walletAddressToCheck);

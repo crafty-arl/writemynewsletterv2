@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Paperclip } from "lucide-react";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Progress } from "@/components/ui/progress";
 
@@ -58,10 +57,6 @@ export function ResponsiveChatInput({ onSubmit }: { onSubmit: (type: string, con
           className="pr-32 rounded-lg text-lg"
         />
         <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
-          <Button size="icon" variant="ghost" className="rounded-lg h-12 w-12 border-2 border-pink-500 border-orange-500 shadow-lg">
-            <Paperclip className="h-6 w-6" />
-            <span className="sr-only">Attach file</span>
-          </Button>
           <Button size="icon" className="rounded-lg h-12 w-12 border-2 border-pink-500 border-orange-500 shadow-lg" onClick={handleSend}>
             <PaperPlaneIcon className="h-6 w-6" />
             <span className="sr-only">Send message</span>
