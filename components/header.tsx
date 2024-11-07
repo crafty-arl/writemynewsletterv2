@@ -12,6 +12,7 @@ import { useWalletBalance } from "thirdweb/react";
 import { mumbai } from "thirdweb/chains";
 import { useTheme } from "@/components/theme-provider"
 import { LoginPayload, VerifyLoginPayloadParams } from "thirdweb/auth";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export const dynamic = "force-dynamic";
 
@@ -48,10 +49,24 @@ export function HeaderComponent() {
           </div>
           <nav className="hidden md:flex space-x-6">
             <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="/">
-              Create
+              Home
             </Link>
-            <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="/library">
-              Library
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="text-pink-200 hover:text-orange-200 transition-colors text-sm">
+                  Tools
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="https://writemynewsletter.craftthefuture.xyz">
+                    Write My Newsletter
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="/blog">
+              Blog
             </Link>
           </nav>
           <div className="flex items-center space-x-4">
@@ -167,6 +182,11 @@ export function HeaderComponent() {
               }}
             />
           </nav>
+        </div>
+      )}
+      {!account && (
+        <div className="bg-yellow-500 text-black text-center py-2">
+          <span className="text-sm">Connect wallet to join us in beta</span>
         </div>
       )}
     </header>
