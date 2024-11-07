@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Write My Newsletter Powered by Craft The Future",
-  description: "Generate newsletters with AI",
+  title: "NoCode Creative - Empower Your Creativity",
+  description: "Unlock your creative potential with our no-code solutions",
 };
 
 export default function RootLayout({

@@ -65,7 +65,7 @@ export function HeaderComponent() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="/blog">
+            <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="https://blog.nocodecreative.xyz">
               Blog
             </Link>
           </nav>
