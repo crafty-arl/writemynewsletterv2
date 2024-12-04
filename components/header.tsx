@@ -40,18 +40,18 @@ export function HeaderComponent() {
   const { theme, setTheme } = useTheme()
 
   return (
-    <header className="w-full bg-gradient-to-r from-pink-800 to-orange-700">
+    <header className="w-full bg-gradient-to-r from-white via-pink-100 to-orange-50 shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <h1 className="text-base font-semibold text-orange-100">No Code Creative</h1>
+            <h1 className="text-base font-semibold text-pink-800">No Code Creative</h1>
           </div>
           <nav className="hidden md:flex space-x-6">
-            <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="/">
-              Create
+            <Link className="text-pink-700 hover:text-orange-600 transition-colors text-sm font-medium" href="/">
+              Write My Newsletter
             </Link>
-            <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm" href="/library">
-              Library
+            <Link className="text-pink-700 hover:text-orange-600 transition-colors text-sm font-medium" href="/gallery">
+              Gallery
             </Link>
           </nav>
           <div className="flex items-center space-x-4">
@@ -107,7 +107,7 @@ export function HeaderComponent() {
               }}
             />
             <button
-              className="md:hidden text-pink-200 hover:text-orange-200 transition-colors"
+              className="md:hidden text-pink-700 hover:text-orange-600 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -115,6 +115,7 @@ export function HeaderComponent() {
             </button>
             <Button 
               variant="outline"
+              className="border-pink-300 hover:border-orange-300"
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             >
               {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
@@ -124,12 +125,12 @@ export function HeaderComponent() {
       </div>
       {isMenuOpen && (
         <div className="md:hidden">
-          <nav className="px-4 pt-2 pb-4 space-y-2 bg-pink-900">
-            <Link className="block text-pink-200 hover:text-orange-200 transition-colors text-sm py-2" href="/">
-              Create
+          <nav className="px-4 pt-2 pb-4 space-y-2 bg-pink-50">
+            <Link className="block text-pink-700 hover:text-orange-600 transition-colors text-sm py-2 font-medium" href="/">
+              Write My Newsletter
             </Link>
-            <Link className="block text-pink-200 hover:text-orange-200 transition-colors text-sm py-2" href="/library">
-              Library
+            <Link className="block text-pink-700 hover:text-orange-600 transition-colors text-sm py-2 font-medium" href="/gallery">
+              Gallery
             </Link>
             <ConnectButton
               client={client}
