@@ -73,6 +73,7 @@ export function HeaderComponent() {
   const { theme, setTheme } = useTheme()
 
   return (
+<<<<<<< HEAD
     <header className="sticky top-0 w-full bg-gradient-to-r from-pink-800 to-orange-700 z-50 shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
@@ -85,6 +86,20 @@ export function HeaderComponent() {
             </Link>
             <Link className="text-pink-200 hover:text-orange-200 transition-colors text-sm font-medium" href="/app">
               Start Writing
+=======
+    <header className="w-full bg-gradient-to-r from-white via-pink-100 to-orange-50 shadow-md">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center space-x-2">
+            <h1 className="text-base font-semibold text-pink-800">No Code Creative</h1>
+          </div>
+          <nav className="hidden md:flex space-x-6">
+            <Link className="text-pink-700 hover:text-orange-600 transition-colors text-sm font-medium" href="/">
+              Write My Newsletter
+            </Link>
+            <Link className="text-pink-700 hover:text-orange-600 transition-colors text-sm font-medium" href="/gallery">
+              Gallery
+>>>>>>> bd17043a1184dcbd365c7f5b3bb099553dc21b37
             </Link>
           </nav>
           <div className="flex items-center">
@@ -128,6 +143,7 @@ export function HeaderComponent() {
                     } catch (error) {
                       console.error("Login error:", error);
                     }
+<<<<<<< HEAD
                   },
                   async doLogout() {
                     console.log("Do logout - Hello World!");
@@ -171,10 +187,55 @@ export function HeaderComponent() {
                 {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
             </div>
+=======
+                  } catch (error) {
+                    console.error("Login error:", error);
+                  }
+                },
+                async doLogout() {
+                  console.log("Do logout - Hello World!");
+                },
+                async getLoginPayload(params: { address: string; chainId: number }): Promise<LoginPayload> {
+                  return {
+                    domain: "example.com",
+                    address: params.address,
+                    statement: "Sign in with Ethereum to the app.",
+                    uri: "https://example.com/login",
+                    version: "1",
+                    chain_id: params.chainId.toString(),
+                    nonce: "123",
+                    issued_at: new Date().toISOString(),
+                    expiration_time: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+                    invalid_before: new Date().toISOString(),
+                    resources: ["https://example.com/api"],
+                  };
+                },
+                async isLoggedIn(address: string) {
+                  console.log("Is logged in - Wallet address:", address);
+                  return true;
+                },
+              }}
+            />
+            <button
+              className="md:hidden text-pink-700 hover:text-orange-600 transition-colors"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+            <Button 
+              variant="outline"
+              className="border-pink-300 hover:border-orange-300"
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            >
+              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            </Button>
+>>>>>>> bd17043a1184dcbd365c7f5b3bb099553dc21b37
           </div>
         </div>
       </div>
       {isMenuOpen && (
+<<<<<<< HEAD
         <div className="md:hidden absolute w-full bg-pink-900 shadow-lg">
           <nav className="container mx-auto px-4 py-3 space-y-3">
             <Link 
@@ -190,6 +251,15 @@ export function HeaderComponent() {
               onClick={() => setIsMenuOpen(false)}
             >
               Start Writing
+=======
+        <div className="md:hidden">
+          <nav className="px-4 pt-2 pb-4 space-y-2 bg-pink-50">
+            <Link className="block text-pink-700 hover:text-orange-600 transition-colors text-sm py-2 font-medium" href="/">
+              Write My Newsletter
+            </Link>
+            <Link className="block text-pink-700 hover:text-orange-600 transition-colors text-sm py-2 font-medium" href="/gallery">
+              Gallery
+>>>>>>> bd17043a1184dcbd365c7f5b3bb099553dc21b37
             </Link>
             <div className="sm:hidden py-2">
               <ConnectButton

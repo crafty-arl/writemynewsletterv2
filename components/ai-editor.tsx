@@ -986,13 +986,13 @@ export default function AIEditor() {
                           </div>
                           {/* Add Newsletter Dialog Card after AI responses */}
                           {message.sender === 'ai' && message.index < activeNewsletter.content_gen_html.length && (
-                            <div className="mt-3 flex space-x-2">
+                            <div className="mt-3">
                               <Dialog>
                                 <DialogTrigger asChild>
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    className="flex-1 max-w-[300px] bg-card hover:bg-accent hover:text-accent-foreground transition-colors duration-200 border-border/50 shadow-sm group relative overflow-hidden"
+                                    className="w-full max-w-[300px] bg-card hover:bg-accent hover:text-accent-foreground transition-colors duration-200 border-border/50 shadow-sm group relative overflow-hidden"
                                   >
                                     <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                                     <div className="flex items-center space-x-3 w-full relative">
@@ -1140,29 +1140,6 @@ export default function AIEditor() {
                                   />
                                 </DialogContent>
                               </Dialog>
-                              
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  const html = activeNewsletter.content_gen_html[message.index];
-                                  if (!html) return;
-                                  try {
-                                    const decodedHtml = decodeURIComponent(html);
-                                    navigator.clipboard.writeText(decodedHtml)
-                                      .then(() => alert('HTML copied to clipboard!'))
-                                      .catch(err => console.error('Failed to copy HTML: ', err));
-                                  } catch (error) {
-                                    console.error('Error decoding HTML for copy:', error);
-                                    navigator.clipboard.writeText(html)
-                                      .then(() => alert('HTML copied to clipboard!'))
-                                      .catch(err => console.error('Failed to copy HTML: ', err));
-                                  }
-                                }}
-                                className="bg-card hover:bg-accent hover:text-accent-foreground transition-colors duration-200 border-border/50 shadow-sm"
-                              >
-                                <Copy className="h-4 w-4" />
-                              </Button>
                             </div>
                           )}
                           {isLoadingNewsletter && message.sender === 'user' && (
